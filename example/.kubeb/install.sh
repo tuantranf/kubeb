@@ -1,0 +1,1 @@
+helm upgrade --install --force sample -f .kubeb/helm-values.yml laravel-rocket-helm-chart/laravel-rocket --wait

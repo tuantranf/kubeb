@@ -1,0 +1,15 @@
+{
+  "name": "laravel-rocket/base",
+  "description": "Base App Code For Laravel Rocket",
+  "keywords": [
+    "framework",
+    "laravel"
+  ],
+  "license": "MIT",
+  "type": "project",
+  "require": {
+    "php": ">=7.1.3"
+  },
+  "require-dev": {
+  }
+}

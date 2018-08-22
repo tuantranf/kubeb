@@ -92,11 +92,69 @@ Options:
   --yes   Confirm the action without prompting.
 ```
 
+## Add example
+
+Example [Laravel example](./example)
+
+
+```bash
+
+# Init application
+$ kubeb init --docker
+Release name [sample]:
+Maintainer name [tranminhtuan]:
+Release template [laravel]:
+Docker image name [tranminhtuan/example]:
+Kubeb config file generated in .kubeb/config.yml
+
+# Build application
+$ kubeb build --message "first build"
+
+# Get all versions
+$ kubeb version
+- v1534975136422: first build
+
+# Deploy application with specified version
+$ kubeb install --version v1534975136422
+Deploying version: v1534975136422
+....
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app=laravel-rocket,release=sample" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl port-forward --namespace default $POD_NAME 8080:80
+
+2. Migrate database by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app=laravel-rocket,release=sample" -o jsonpath="{.items[0].metadata.name}")
+  Migrate database
+  kubectl --namespace default exec -ti $POD_NAME -- php artisan migrate
+  Run test data seeder
+  kubectl --namespace default exec -ti $POD_NAME -- php artisan db:seed
+
+
+Install application succeed.
+
+# Apllication verify
+$ export POD_NAME=$(kubectl get pods --namespace default -l "app=laravel-rocket,release=sample" -o jsonpath="{.items[0].metadata.name}")
+$ kubectl port-forward --namespace default $POD_NAME 8080:80
+
+echo "Visit http://127.0.0.1:8080 to use your application"
+
+# Uninstall application
+$ kubeb uninstall
+Do you want to continue? [y/N]: y
+release "sample" deleted
+
+Uninstall application succeed.
+```
+
 ## How to add new template
 
 Please add these files to templates folder.
-Example [Laravel template](./libs/template/laravel)
+Example [Laravel template](./libs/templates/laravel)
 
+# Clean up all Kubeb configuration
+$ kubeb destroy --yes
 
 ```bash
 $ tree libs/template/laravel
