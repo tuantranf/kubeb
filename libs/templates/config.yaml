@@ -1,0 +1,4 @@
+name: {{ name }}
+template: {{ template }}
+user: {{ user }}
+image: {{ image }}

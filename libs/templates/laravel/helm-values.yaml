@@ -1,0 +1,48 @@
+replicaCount: 1
+
+image:
+  repository: {{ image }}
+  tag: {{ tag }}
+  pullPolicy: IfNotPresent
+  {% if env_vars and len(env_vars) > 0 %}
+  envVars:
+  {% for key, value in env_vars.items() %}
+    - name: {{ key }}
+      value: {{ value }}
+  {% endfor %}
+  {% endif %}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - chart-example.local
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.https://scontent.xx.fbcdn.net/v/t1.15752-0/p280x280/39589135_1912471879048090_7796517870296367104_n.png?_nc_cat=0&_nc_ad=z-m&_nc_cid=0&oh=ea62b6b729e162fc0f8d75120ffe6884&oe=5BF4E4B6
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mihttps://scontent.xx.fbcdn.net/v/t1.15752-0/p280x280/39589135_1912471879048090_7796517870296367104_n.png?_nc_cat=0&_nc_ad=z-m&_nc_cid=0&oh=ea62b6b729e162fc0f8d75120ffe6884&oe=5BF4E4B6
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

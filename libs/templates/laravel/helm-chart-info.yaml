@@ -1,0 +1,3 @@
+repo_name: laravel-rocket-helm-chart
+repo_url: https://tuantranf.github.io/laravel-rocket-helm-chart
+chart_name: laravel-rocket
