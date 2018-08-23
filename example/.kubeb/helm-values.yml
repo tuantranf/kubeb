@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: tranminhtuan/example
-  tag: v1534975136422
+  tag: v1535016792358
   pullPolicy: IfNotPresent
   
 service:

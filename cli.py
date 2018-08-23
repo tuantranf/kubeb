@@ -4,8 +4,8 @@ import time
 import click
 # from dotenv import dotenv_values
 
-from libs.kubeb import Kubeb, pass_kubeb
-from libs import file_util, config, command
+from kubeb.core import Kubeb, pass_kubeb
+from kubeb import file_util, config, command
 
 @click.group()
 @click.version_option('0.0.1')
@@ -15,7 +15,7 @@ def cli(ctx):
 
 @cli.command()
 @click.option('--name', '-n',
-              default='sample',
+              default=lambda: os.path.basename(os.getcwd()),
               prompt='Release name',
               help='Release name.')
 @click.option('--user', '-n',

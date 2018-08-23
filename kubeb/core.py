@@ -3,7 +3,7 @@ import sys
 import click
 
 
-class Kubeb(object):
+class Kubeb():
 
     def log(self, msg, *args):
         if args:

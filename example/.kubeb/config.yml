@@ -1,7 +1,7 @@
 image: tranminhtuan/example
-name: sample
+name: example
 template: laravel
 user: tranminhtuan
 version:
-- message: first build
-  tag: v1534975136422
+- message: release 1
+  tag: v1535016792358

@@ -1,1 +1,1 @@
-helm delete --purge sample
+helm delete --purge example

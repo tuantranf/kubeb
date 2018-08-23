@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='kubeb',
     version='0.0.1',
-    packages=['libs'],
+    packages=['kubeb'],
     include_package_data=True,
     install_requires=[
         'click',

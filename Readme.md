@@ -193,7 +193,7 @@ Uninstall application succeed.
 ## How to add new template
 
 Please add these files to templates folder.
-Example [Laravel template](./libs/templates/laravel)
+Example [Laravel template](kubeb/templates/laravel)
 
 # Clean up all Kubeb configuration
 kubeb destroy --yes
