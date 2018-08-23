@@ -1,15 +1,25 @@
 # Kubeb: Kubernetes deploy cli
 
-## Note
  Kubeb (Cubeb or Cubeba) provide CLI to build and deploy a web application to Kubernetes environment
  Kubeb use Docker & Helm chart for Kubernetes deployment
 
-## Python version
+## TL;DR;
+
+```bash
+$ kubeb init --name sample --template laravel
+$ kubeb build -m 'release version 1'
+$ kubeb install
+```
+
+## TODO
+- [ ] Separate template directory to add new templates (plug-ins)
+- [ ] Add template for mysql, python
+- [ ] Add install script
 
 ## Install:
 ```bash
   $ git clone [REPOSITORY_URL]
-  $ cd docker-generator
+  $ cd kubeb
   $ python3 -m venv env
   $ source env/bin/activate
   $ pip install -r requirements.txt
