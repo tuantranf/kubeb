@@ -3,28 +3,39 @@
  Kubeb (Cubeb or Cubeba) provide CLI to build and deploy a web application to Kubernetes environment
  Kubeb use Docker & Helm chart for Kubernetes deployment
 
+## Install
+
+  Kubeb is installed by running one of the following commands in your terminal. You can install this via the command-line with either curl or wget.
+
+  ### Requirement
+
+  - Git
+  - Python 3
+
+  ### via curl
+  ```bash
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/tuantranf/kubeb/master/tools/install.sh)"
+  ```
+
+  ### via wget
+  ```bash
+  $ sh -c "$(wget https://raw.githubusercontent.com/tuantranf/kubeb/master/tools/install.sh -O -)"
+  ```
+
 ## TL;DR;
 
 ```bash
+# Init application
 $ kubeb init --name sample --template laravel
+# Build application
 $ kubeb build -m 'release version 1'
+# Deploy application
 $ kubeb install
 ```
 
-## TODO
-- [ ] Separate template directory to add new templates (plug-ins)
-- [ ] Add template for mysql, python
-- [ ] Add install script
-
-## Install:
-```bash
-  $ git clone [REPOSITORY_URL]
-  $ cd kubeb
-  $ python3 -m venv env
-  $ source env/bin/activate
-  $ pip install -r requirements.txt
-  $ pip install --editable .
-  $ kubeb --help
+## Command
+  ```bash
+  kubeb --help
     Usage: kubeb [OPTIONS] COMMAND [ARGS]...
 
     Options:
@@ -39,12 +50,13 @@ $ kubeb install
       install    Install current application to Kubernetes...
       uninstall  Uninstall current application from Kubernetes
       version    Show current application versions
-```
+  ```
 
 ## Initiate your application
 
 ```bash
-$ kubeb init --help
+kubeb init --help
+
 Usage: kubeb init [OPTIONS]
 
   Init kubeb configuration Generate config, script files Generate Docker
@@ -62,7 +74,8 @@ Options:
 ## Build your application (Dockerfile building)
 
 ```bash
-$ kubeb build --help
+kubeb build --help
+
 Usage: kubeb build [OPTIONS]
 
   Build current application Build Dockerfile image Add release note, tag to
@@ -78,7 +91,8 @@ Options:
 Using --version option to specify application version. If version is not specified, Kubeb will use the latest version
 You can see version list by `kubeb version` command
 ```bash
-$ kubeb install --help
+kubeb install --help
+
 Usage: kubeb install [OPTIONS]
 
   Install current application to Kubernetes Generate Helm chart value file
@@ -93,7 +107,8 @@ Options:
 ## Uninstall your application from Kubernetes
 
 ```bash
-$ kubeb uninstall --help
+kubeb uninstall --help
+
 Usage: kubeb uninstall [OPTIONS]
 
   Uninstall current application from Kubernetes
@@ -102,30 +117,40 @@ Options:
   --yes   Confirm the action without prompting.
 ```
 
-## Add example
+## Deploy a Laravel example
 
 Example [Laravel example](./example)
 
+### Initiate application
 
 ```bash
-
-# Init application
 $ kubeb init --docker
+
 Release name [sample]:
 Maintainer name [tranminhtuan]:
 Release template [laravel]:
 Docker image name [tranminhtuan/example]:
 Kubeb config file generated in .kubeb/config.yml
+```
 
-# Build application
+### Build application
+
+```bash
 $ kubeb build --message "first build"
+```
 
-# Get all versions
+### Get all versions
+
+```bash
 $ kubeb version
 - v1534975136422: first build
+```
 
-# Deploy application with specified version
+### Deploy application with specified version
+
+```bash
 $ kubeb install --version v1534975136422
+
 Deploying version: v1534975136422
 ....
 NOTES:
@@ -143,15 +168,22 @@ NOTES:
 
 
 Install application succeed.
+```
 
-# Apllication verify
+### Apllication verify
+
+```bash
 $ export POD_NAME=$(kubectl get pods --namespace default -l "app=laravel-rocket,release=sample" -o jsonpath="{.items[0].metadata.name}")
 $ kubectl port-forward --namespace default $POD_NAME 8080:80
+```
 
-echo "Visit http://127.0.0.1:8080 to use your application"
+Visit http://127.0.0.1:8080 to use your application"
 
-# Uninstall application
+### Uninstall application
+
+```bash
 $ kubeb uninstall
+
 Do you want to continue? [y/N]: y
 release "sample" deleted
 
@@ -164,10 +196,10 @@ Please add these files to templates folder.
 Example [Laravel template](./libs/templates/laravel)
 
 # Clean up all Kubeb configuration
-$ kubeb destroy --yes
+kubeb destroy --yes
 
 ```bash
-$ tree libs/template/laravel
+tree libs/template/laravel
 .
 ├── Dockerfile
 ├── docker
