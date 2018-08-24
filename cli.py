@@ -30,14 +30,18 @@ def cli(ctx):
               default=lambda: os.environ.get('USER', '') + '/' + os.path.basename(os.getcwd()),
               prompt='Docker image name',
               help='Docker image name.')
-@click.option('--docker',
+@click.option('--env',
+              default='local',
+              prompt='Environment name',
+              help='Environment name.')
+@click.option('--local',
               is_flag=True,
-              help='Generate docket setup files.')
+              help='Using local docker image.')
 @click.option('--force',
               is_flag=True,
               help='Overwrite config file.')
 @pass_kubeb
-def init(kubeb, name, user, template, docker, image, force):
+def init(kubeb, name, user, template, local, image, env, force):
     """ Init kubeb configuration
         Generate config, script files
         Generate Docker stuff if use --docker option
@@ -46,11 +50,12 @@ def init(kubeb, name, user, template, docker, image, force):
         kubeb.log('Kubeb config found. Please update config file or use --force option')
         return
 
-    file_util.generate_config_file(name, user, template, image)
+    file_util.generate_config_file(name, user, template, image, local, env)
     file_util.generate_script_file(name, template)
+    file_util.generate_environment_file(env, template)
 
-    if docker:
-        file_util.generate_docker_file(user, template)
+    if local:
+        file_util.generate_docker_file(template)
 
     kubeb.log('Kubeb config file generated in %s', click.format_filename(file_util.config_file))
 
@@ -67,7 +72,8 @@ def info(kubeb):
     print(config_data)
 
 @cli.command()
-@click.option('--message', '-m', multiple=True,
+@click.option('--message', '-m',
+              multiple=True,
               help='Release note')
 @pass_kubeb
 def build(kubeb, message):
@@ -89,7 +95,7 @@ def build(kubeb, message):
     else:
         msg = '\n'.join(message)
 
-    if file_util.docker_file_exist():
+    if config.get_local():
         image = config.get_image()
         tag = 'v' + str(int(round(time.time() * 1000)))
 
@@ -104,8 +110,7 @@ def build(kubeb, message):
         config.add_version(tag, msg)
 
 @cli.command()
-@click.option('--version',
-              '-v',
+@click.option('--version', '-v',
               help='Install version.')
 @pass_kubeb
 def install(kubeb, version):
@@ -117,14 +122,16 @@ def install(kubeb, version):
         kubeb.log('Kubeb config file not found')
         return
 
-    deploy_version = config.get_version(version)
-    if not deploy_version:
-        kubeb.log('No deployable version found')
-        return
+    if config.get_local():
+        deploy_version = config.get_version(version)
+        if not deploy_version:
+            kubeb.log('No deployable version found')
+            return
 
-    kubeb.log('Deploying version: %s', deploy_version["tag"])
-
-    file_util.generate_helm_file(config.get_template(), config.get_image(), deploy_version["tag"])
+        kubeb.log('Deploying version: %s', deploy_version["tag"])
+        file_util.generate_helm_file(config.get_template(), config.get_image(), deploy_version["tag"], config.get_current_environment())
+    else:
+        file_util.generate_helm_file(config.get_template(), config.get_image(), "latest", config.get_current_environment())
 
     status, output, err = command.run(command.install_command())
     if status != 0:
@@ -170,6 +177,27 @@ def version(kubeb):
     for version in versions:
         kubeb.log('- %s: %s', version['tag'], version['message'])
 
+@cli.command()
+@click.argument('env',
+            default='local',
+            help='Environment',
+            type=str)
+@pass_kubeb
+def env(kubeb, env):
+    """Use environment
+    """
+    if not file_util.config_file_exist():
+        kubeb.log('Kubeb config file not found in %s', file_util.kubeb_directory)
+        return
+
+    environment = config.get_env(env)
+    if not environment:
+        kubeb.log('Environment not found')
+        kubeb.log('Initiate environment %s in %s', env, file_util.kubeb_directory)
+        file_util.generate_environment_file(env)
+
+    config.set_current_environement(env)
+    kubeb.log('Now use %', env)
 
 @cli.command()
 @click.confirmation_option()

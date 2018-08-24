@@ -1,0 +1,5 @@
+chart_name: laravel-rocket-helm-chart/laravel-rocket
+official: false
+repository:
+  name: laravel-rocket-helm-chart
+  url: https://tuantranf.github.io/laravel-rocket-helm-chart
