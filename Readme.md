@@ -235,3 +235,10 @@ tree libs/template/laravel
 ├── helm-chart-info.yaml
 └── helm-values.yaml
 ```
+
+## Todo
+- [ ] Using Kubernetes namespace for each environment
+- [ ] Refactor code: use class in config, file_utils, core, command
+- [ ] Refactor command: run python script instead of Shell script (install.sh, uninstall.sh)
+- [ ] Publish library: user can install using pip install
+- [ ] Move kubeb to bin/kubeb
