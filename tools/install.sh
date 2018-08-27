@@ -70,6 +70,8 @@ main() {
   pip install -r requirements.txt
   pip install --editable .
 
+  ln -sfn "$KUBEB/.env3/bin/kubeb" /usr/local/bin/kubeb
+
   cd "$ORIGIN_DIR"
 
   printf "${GREEN}"
