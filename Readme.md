@@ -8,7 +8,7 @@
   Kubeb is installed by running one of the following commands in your terminal. You can install this via the command-line with either curl or wget.
 
   ### Requirement
-
+  
   - Git
   - Python 3
 
@@ -21,6 +21,8 @@
   ```bash
   $ sh -c "$(wget https://raw.githubusercontent.com/tuantranf/kubeb/master/tools/install.sh -O -)"
   ```
+  
+  ### Uninstall
 
 ## TL;DR;
 
@@ -131,6 +133,23 @@ Options:
 ## Deploy a Laravel example
 
 Example [Laravel example](./example)
+
+### Setup your Kubernetes environment
+
+#### Kubernetes
+
+ Local Kubernetes
+ - Minikube https://kubernetes.io/docs/setup/minikube/
+ - Docker Edge
+https://docs.docker.com/docker-for-mac/kubernetes/
+
+#### Kubectl - CLI for Kubernetes
+
+ - Install Kubectl https://kubernetes.io/docs/tasks/tools/install-kubectl/
+
+#### Helm - Package manager for Kubernetes
+ 
+ - https://helm.sh/
 
 ### Initiate application
 
