@@ -234,17 +234,29 @@ Example [Laravel template](kubeb/templates/laravel)
 ```bash
 tree libs/template/laravel
 .
-├── Dockerfile
-├── docker
+├── Dockerfile # Dockerfile template
+├── docker # Dockerfile config data
 │   ├── entrypoint.sh
 │   └── vhost.conf
-├── helm-chart-info.yaml
-└── helm-values.yaml
+├── info.yaml # helm chart information
+└── helm-values.yaml # helm chart configuration
+```
+
+```bash
+kubeb template --help
+Usage: kubeb template [OPTIONS] NAME PATH
+
+  Add user template kubeb [template_name] [template_directory_path] Example:
+  kubeb template example ./example Will add template to external template
+  directory: ~/.kubeb/ext-templates/[template_name]
+
+Options:
+  --force  Overwrite template file.
+  --help   Show this message and exit.
 ```
 
 ## Todo
 - [ ] Using Kubernetes namespace for each environment
 - [ ] Refactor code: use class in config, file_utils, core, command
 - [ ] Refactor command: run python script instead of Shell script (install.sh, uninstall.sh)
-- [ ] Publish library: user can install using pip install
-- [ ] Move kubeb to bin/kubeb
+- [ ] Publish library: user can install using pip install & Move kubeb to bin/kubeb

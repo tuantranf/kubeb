@@ -7,13 +7,20 @@ imageTag: "5.7.14"
 ## Specify password for root user
 ##
 ## Default: random 10 character string
-mysqlRootPassword: root
+{% if  env_vars and env_vars.get('MYSQL_ROOT_PASSWORD') | length > 0 %}
+mysqlRootPassword: {{ env_vars.get('MYSQL_ROOT_PASSWORD') }}
+{% endif %}
 
 ## Create a database user
 ##
-mysqlUser: rocket
+{% if  env_vars and env_vars.get('MYSQL_USER') | length > 0 %}
+mysqlUser: {{ env_vars.get('MYSQL_USER') }}
+{% endif %}
+
 ## Default: random 10 character string
-mysqlPassword: x7at4GX7GjxX2qkJ
+{% if  env_vars and env_vars.get('MYSQL_PASSWORD') | length > 0 %}
+mysqlPassword: {{ env_vars.get('MYSQL_PASSWORD') }}
+{% endif %}
 
 ## Allow unauthenticated access, uncomment to enable
 ##
@@ -21,7 +28,9 @@ mysqlPassword: x7at4GX7GjxX2qkJ
 
 ## Create a database
 ##
-mysqlDatabase: example
+{% if  env_vars and env_vars.get('MYSQL_DATABASE') | length > 0 %}
+mysqlDatabase: {{ env_vars.get('MYSQL_DATABASE') }}
+{% endif %}
 
 ## Specify an imagePullPolicy (Required)
 ## It's recommended to change this to 'Always' if the image tag is 'latest'

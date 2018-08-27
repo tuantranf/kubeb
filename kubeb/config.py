@@ -80,3 +80,7 @@ def set_current_environement(env):
 
 def get_current_environment():
     return file_util.get_value('current_environment', file_util.config_file)
+
+
+def get_ext_template():
+    return file_util.get_value('ext_template', file_util.config_file)

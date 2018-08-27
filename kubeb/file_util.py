@@ -17,6 +17,7 @@ docker_file = os.path.join(os.getcwd(), "Dockerfile")
 docker_directory = os.path.join(os.getcwd(), "docker")
 
 template_directory = os.path.abspath(os.path.join(os.path.dirname(__file__), './templates/')) + os.path.sep
+ext_template_directory = os.path.abspath(os.path.join(os.path.dirname(__file__), '../ext_templates/')) + os.path.sep
 helm_template_directory = template_directory + "helm"
 
 _marker = object()
@@ -42,12 +43,19 @@ def remove_config_dir():
         shutil.rmtree(directory)
 
 
-def generate_config_file(name, user, template, image, local, env):
+def get_template_directory(template, external):
+    if external:
+        return ext_template_directory + template
+    else:
+        return template_directory + template
+
+def generate_config_file(name, user, template, ext_template, image, local, env):
     init_config_dir()
 
     values = dict(
         name=name,
         template=template,
+        ext_template=ext_template,
         user=user,
         image=image,
         local=local,
@@ -85,8 +93,11 @@ def generate_docker_file(template):
     shutil.copytree(os.path.join(template_dir, 'docker'), docker_directory)
 
 
-def generate_helm_file(template, image, tag, env):
-    template_dir = template_directory + template
+def generate_helm_file(template, ext_template, image, tag, env):
+    if ext_template:
+        template_dir = template_directory + template
+    else:
+        template_dir = ext_template_directory + template
 
     dotenv_path = get_environment_file(env)
     if not os.path.exists(dotenv_path):
@@ -94,8 +105,6 @@ def generate_helm_file(template, image, tag, env):
         return None
 
     parsed_dict = dotenv_values(dotenv_path)
-
-    assert 'APP_ENV' in parsed_dict
 
     env_vars = dict()
     for key, value in parsed_dict.items():
@@ -203,3 +212,20 @@ def generate_environment_file(env, template):
     docker_file_src = os.path.join(template_dir, '.env')
     docker_file_dst = os.path.join(work_dir, '.env.' + env)
     shutil.copy(docker_file_src, docker_file_dst)
+
+
+def template_exist(template):
+    return os.path.isdir(template_directory + template) \
+           or os.path.isdir(ext_template_directory + template)
+
+
+def is_ext_template(template):
+    return os.path.isdir(ext_template_directory + template)
+
+
+def add_ext_template(name, path):
+    template_dir = ext_template_directory + name
+    if os.path.isdir(template_dir):
+        shutil.rmtree(template_dir)
+
+    shutil.copytree(path, template_dir)

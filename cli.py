@@ -50,7 +50,13 @@ def init(kubeb, name, user, template, local, image, env, force):
         kubeb.log('Kubeb config found. Please update config file or use --force option')
         return
 
-    file_util.generate_config_file(name, user, template, image, local, env)
+    if (not file_util.template_exist(template)):
+        kubeb.log('Kubeb template not found. Please check template name')
+        return
+
+    ext_template = file_util.is_ext_template(template)
+
+    file_util.generate_config_file(name, user, template, ext_template, image, local, env)
     file_util.generate_script_file(name, template)
     file_util.generate_environment_file(env, template)
 
@@ -129,9 +135,9 @@ def install(kubeb, version):
             return
 
         kubeb.log('Deploying version: %s', deploy_version["tag"])
-        file_util.generate_helm_file(config.get_template(), config.get_image(), deploy_version["tag"], config.get_current_environment())
+        file_util.generate_helm_file(config.get_template(), config.get_image(), config.get_ext_template(), deploy_version["tag"], config.get_current_environment())
     else:
-        file_util.generate_helm_file(config.get_template(), config.get_image(), "latest", config.get_current_environment())
+        file_util.generate_helm_file(config.get_template(), config.get_image(), config.get_ext_template(), "latest", config.get_current_environment())
 
     status, output, err = command.run(command.install_command())
     if status != 0:
@@ -199,6 +205,34 @@ def env(kubeb, env):
 
     config.set_current_environement(env)
     kubeb.log('Now use %s', env)
+
+
+@cli.command()
+@click.argument('name', required=True,
+                default="sample",
+                type=str)
+@click.argument('path', required=True,
+                default=".",
+                type=click.Path(resolve_path=True))
+@click.option('--force',
+              is_flag=True,
+              help='Overwrite template file.')
+
+@pass_kubeb
+def template(kubeb, name, path, force):
+    """Add user template
+        kubeb [template_name] [template_directory_path]
+        Example: kubeb template example ./example
+        Will add template to external template directory: ~/.kubeb/ext-templates/[template_name]
+    """
+
+    if file_util.template_exist(name) and not force:
+        kubeb.log('Kubeb template found. Please change name or --force')
+        return
+
+    file_util.add_ext_template(name, path)
+
+    kubeb.log('Kubeb template add to %s', click.format_filename(file_util.ext_template_directory))
 
 @cli.command()
 @click.confirmation_option()
