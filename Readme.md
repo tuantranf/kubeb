@@ -217,13 +217,19 @@ release "sample" deleted
 Uninstall application succeed.
 ```
 
+#### Clean up all Kubeb configuration
+
+```bash
+kubeb destroy --yes
+
+```
+
+
 ## How to add new template
 
 Please add these files to templates folder.
 Example [Laravel template](kubeb/templates/laravel)
 
-# Clean up all Kubeb configuration
-kubeb destroy --yes
 
 ```bash
 tree libs/template/laravel
