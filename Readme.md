@@ -26,7 +26,7 @@
 
 ```bash
 # Init application
-$ kubeb init --name sample --template laravel
+$ kubeb init --name sample --template laravel --local
 # Build application
 $ kubeb build -m 'release version 1'
 # Deploy application
@@ -56,19 +56,30 @@ $ kubeb install
 
 ```bash
 kubeb init --help
-
 Usage: kubeb init [OPTIONS]
 
   Init kubeb configuration Generate config, script files Generate Docker
-  stuff if use --docker option
+  stuff if use --local option
 
 Options:
   -n, --name TEXT      Release name.
   -n, --user TEXT      Maintainer name.
   -t, --template TEXT  Release template name.
   --image TEXT         Docker image name.
-  --docker             Generate docket setup files.
+  --env TEXT           Environment name.
+  --local              Using local docker image.
   --force              Overwrite config file.
+  --help               Show this message and exit.
+```
+
+## Select environment for your application
+
+```bash
+kubeb env --help
+Usage: kubeb env [ENV]
+
+  Use environment Example: kubeb env develop to use environment develop
+
 ```
 
 ## Build your application (Dockerfile building)
@@ -124,7 +135,7 @@ Example [Laravel example](./example)
 ### Initiate application
 
 ```bash
-$ kubeb init --docker
+$ kubeb init --local
 
 Release name [sample]:
 Maintainer name [tranminhtuan]:
@@ -133,10 +144,26 @@ Docker image name [tranminhtuan/example]:
 Kubeb config file generated in .kubeb/config.yml
 ```
 
+```yaml
+current_environment: local
+environments:
+  local:
+    name: local
+image: tranminhtuan/example
+local: true
+name: example
+template: laravel
+user: tranminhtuan
+version:
+- message: build
+  tag: v1535331009272
+```
+
 ### Build application
 
 ```bash
 $ kubeb build --message "first build"
+
 ```
 
 ### Get all versions

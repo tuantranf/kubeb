@@ -1,0 +1,4 @@
+name: mysql
+template: mysql
+user: tranminhtuan
+image: tranminhtuan/mysql

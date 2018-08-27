@@ -44,7 +44,7 @@ def cli(ctx):
 def init(kubeb, name, user, template, local, image, env, force):
     """ Init kubeb configuration
         Generate config, script files
-        Generate Docker stuff if use --docker option
+        Generate Docker stuff if use --local option
     """
     if file_util.config_file_exist() and force is False:
         kubeb.log('Kubeb config found. Please update config file or use --force option')
@@ -177,14 +177,15 @@ def version(kubeb):
     for version in versions:
         kubeb.log('- %s: %s', version['tag'], version['message'])
 
+
 @cli.command()
 @click.argument('env',
-            default='local',
-            help='Environment',
-            type=str)
+                default='local',
+                type=str)
 @pass_kubeb
 def env(kubeb, env):
     """Use environment
+        Example: kubeb env develop to use environment develop
     """
     if not file_util.config_file_exist():
         kubeb.log('Kubeb config file not found in %s', file_util.kubeb_directory)
@@ -194,10 +195,10 @@ def env(kubeb, env):
     if not environment:
         kubeb.log('Environment not found')
         kubeb.log('Initiate environment %s in %s', env, file_util.kubeb_directory)
-        file_util.generate_environment_file(env)
+        file_util.generate_environment_file(env, config.get_template())
 
     config.set_current_environement(env)
-    kubeb.log('Now use %', env)
+    kubeb.log('Now use %s', env)
 
 @cli.command()
 @click.confirmation_option()

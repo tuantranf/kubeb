@@ -88,13 +88,24 @@ def generate_docker_file(template):
 def generate_helm_file(template, image, tag, env):
     template_dir = template_directory + template
 
-    values = dotenv_values(kubeb_directory + ".env." + env)
-    print(values)
+    dotenv_path = get_environment_file(env)
+    if not os.path.exists(dotenv_path):
+        print("can't read %s - it doesn't exist." % dotenv_path)
+        return None
+
+    parsed_dict = dotenv_values(dotenv_path)
+
+    assert 'APP_ENV' in parsed_dict
+
+    env_vars = dict()
+    for key, value in parsed_dict.items():
+        if value and value != '' and value != 'null':
+            env_vars[key] = value
 
     values = dict(
         image=image,
         tag=tag,
-        env_vars=dict()
+        env_vars=env_vars
     )
 
     jinja2_env = Environment(loader=FileSystemLoader(template_dir), trim_blocks=True)
@@ -181,11 +192,14 @@ def get_yaml_dict(filename):
     except IOError:
         return {}
 
+def get_environment_file(env):
+    work_dir = os.getcwd()
+    return os.path.join(work_dir, '.env.' + env)
 
 def generate_environment_file(env, template):
     work_dir = os.getcwd()
     template_dir = template_directory + template
 
-    docker_file_src = os.path.join(template_dir, '.env.sample')
+    docker_file_src = os.path.join(template_dir, '.env')
     docker_file_dst = os.path.join(work_dir, '.env.' + env)
     shutil.copy(docker_file_src, docker_file_dst)

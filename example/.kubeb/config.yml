@@ -1,7 +1,12 @@
+current_environment: local
+environments:
+  local:
+    name: local
 image: tranminhtuan/example
+local: true
 name: example
 template: laravel
 user: tranminhtuan
 version:
-- message: release 1
-  tag: v1535016792358
+- message: build
+  tag: v1535331009272

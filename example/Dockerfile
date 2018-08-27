@@ -1,6 +1,6 @@
 FROM centos/httpd:latest
 
-MAINTAINER tranminhtuan
+MAINTAINER kubeb
 
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 

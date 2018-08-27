@@ -52,9 +52,12 @@ def get_local():
 
 def get_env(name):
     environments = file_util.get_value('env', file_util.config_file)
+    if not environments:
+        return None
+
     environment = None
     try:
-        environment = environments[name]
+        environment = environments.name
     except KeyError:
         pass
 
