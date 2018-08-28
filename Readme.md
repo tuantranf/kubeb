@@ -3,6 +3,12 @@
  Kubeb (Cubeb or Cubeba) provide CLI to build and deploy a web application to Kubernetes environment
  Kubeb use Docker & Helm chart for Kubernetes deployment
 
+# This repository has moved
+
+*****
+This repository has been moved to [podder-ai](https://github.com/podder-ai/kubeb). 
+*****
+
 ## Install
 
   Kubeb is installed by running one of the following commands in your terminal. You can install this via the command-line with either curl or wget.
