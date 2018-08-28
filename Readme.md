@@ -6,7 +6,7 @@
 # This repository has moved
 
 *****
-This repository has been moved to [podder-ai](https://github.com/podder-ai/kubeb). 
+This repository has been moved to [podder-ai/kubeb](https://github.com/podder-ai/kubeb). 
 *****
 
 ## Install
